@@ -1,0 +1,127 @@
+1️⃣ User / Account Entities
+
+1. User
+
+Fields: id, name, email, phone, passwordHash, role (buyer/vendor/admin), avatarUrl, createdAt, updatedAt
+
+Relationships:
+
+1:N → Requests (if buyer)
+
+1:N → Bids (if vendor)
+
+1:N → Notifications
+
+2. VendorProfile
+
+Fields: id, userId, businessName, businessType, address, verified (bool), subscriptionPlan, rating, createdAt
+
+Relationships:
+
+1:1 → User
+
+1:N → Bids
+
+2️⃣ Core Platform Entities
+
+3. Request (Buyer’s request for a gift/item)
+
+Fields: id, userId (buyer), title, description, photoUrls, deliveryTime, location, status (open/assigned/completed/cancelled), createdAt, updatedAt
+
+Relationships:
+
+1:N → Bids
+
+1:N → Notifications
+
+1:1 → Transaction (after buyer chooses vendor)
+
+4. Bid (Vendor’s proposal to fulfill a request)
+
+Fields: id, requestId, vendorId, price, deliveryETA, sampleUrls, status (pending/accepted/rejected), createdAt
+
+Relationships:
+
+N:1 → Request
+
+N:1 → VendorProfile
+
+5. Delivery (Optional separate entity if tracking is complex)
+
+Fields: id, requestId, vendorId, status (in-progress/completed), currentLocation, eta, deliveredAt, createdAt
+
+Relationships:
+
+1:1 → Request
+
+3️⃣ Payment & Financial Entities
+
+6. Transaction (you’ve done this already)
+
+Fields: id, requestId, buyerId, vendorId, amount, commission, status (pending/paid/refunded), paymentMethod, createdAt
+
+7. SubscriptionPlan
+
+Fields: id, name (Free / Pro), price, maxBids, priorityListing (bool)
+
+Relationships:
+
+1:N → VendorProfile
+
+4️⃣ Messaging & Interaction Entities
+
+8. ChatMessage
+
+Fields: id, requestId, senderId, receiverId, messageText, attachments, read (bool), createdAt
+
+Relationships:
+
+N:1 → Request
+
+N:1 → User
+
+5️⃣ Admin / Analytics Entities
+
+9. Admin (could reuse User with role=admin)
+
+Fields: id, name, email, permissions
+
+10. Dispute
+
+Fields: id, transactionId, requestId, complainantId, reason, status (open/resolved/rejected), createdAt
+
+11. FeaturedListing / Advertisement
+
+Fields: id, vendorId, requestId (optional), priorityLevel, activeUntil, createdAt
+
+6️⃣ Optional / Enhancement Entities
+
+Wishlist / RecurringEvent → for buyers who want automated gifting suggestions
+
+Rating / Review → for vendors (after request completion)
+
+Fields: id, reviewerId, vendorId, requestId, rating, comment
+
+Relationships Overview (ERD-style)
+
+User (buyer) 1:N → Requests
+
+Request 1:N → Bids
+
+VendorProfile 1:N → Bids
+
+Request 1:1 → Transaction
+
+Request 1:N → Notifications, ChatMessages
+
+Transaction 1:1 → Dispute
+
+VendorProfile N:1 → SubscriptionPlan
+
+VendorProfile 0:N → FeaturedListing
+
+✅ Next step: You could start creating entities for Request, Bid, Delivery, ChatMessage, Rating/Review, and Dispute — these are the core pieces missing after Notification and Transaction.
+
+If you want, I can draw a full entity diagram with all relationships for Giftera so you can see it visually before coding. This will make your database design much clearer.
+
+Do you want me to do that?
