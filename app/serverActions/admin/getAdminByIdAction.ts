@@ -5,8 +5,12 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function getAdminByIdAction(id: string): Promise<Admin> {
-  const supabase = supabaseServer();
-  const { data, error } = await supabase.from("admins").select("*").eq("id", id).single();
+  const supabase = await supabaseServer();
+  const { data, error } = await supabase
+    .from("admins")
+    .select("*")
+    .eq("id", id)
+    .single();
   if (error) throw error;
   return keysToCamel<Admin>(data);
 }

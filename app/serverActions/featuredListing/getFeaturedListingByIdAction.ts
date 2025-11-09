@@ -4,8 +4,10 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { FeaturedListing } from "@/entities/featuredListing/types/types";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
-export const getFeaturedListingByIdAction = async (id: string): Promise<FeaturedListing> => {
-  const supabase = supabaseServer();
+export const getFeaturedListingByIdAction = async (
+  id: string
+): Promise<FeaturedListing> => {
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from("featured_listings")

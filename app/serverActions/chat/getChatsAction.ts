@@ -5,11 +5,14 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { camelToSnake } from "@/shared/utils/keysToSnake";
 
-export async function getChatsAction(params: GetChatsParams = {}): Promise<Chat[]> {
-  const supabase = supabaseServer();
+export async function getChatsAction(
+  params: GetChatsParams = {}
+): Promise<Chat[]> {
+  const supabase = await supabaseServer();
   let query = supabase.from("chats").select("*");
 
-  if (params.conversationId) query = query.eq("conversation_id", params.conversationId);
+  if (params.conversationId)
+    query = query.eq("conversation_id", params.conversationId);
   if (params.senderId) query = query.eq("sender_id", params.senderId);
   if (params.receiverId) query = query.eq("receiver_id", params.receiverId);
 

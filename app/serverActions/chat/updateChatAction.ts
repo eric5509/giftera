@@ -6,8 +6,8 @@ import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
 export async function updateChatAction(input: UpdateChatInput): Promise<Chat> {
-  const supabase = supabaseServer();
-  const payload = keysToSnake<Record<string, any>>(input)
+  const supabase = await supabaseServer();
+  const payload = keysToSnake<Record<string, any>>(input);
   const { data, error } = await supabase
     .from("chats")
     .update(payload)

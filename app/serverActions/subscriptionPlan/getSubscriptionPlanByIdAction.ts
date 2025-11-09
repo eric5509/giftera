@@ -7,7 +7,7 @@ import { keysToCamel } from "@/shared/utils/keysToCamel";
 export async function getSubscriptionPlanByIdAction(
   id: string
 ): Promise<SubscriptionPlan> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from("subscription_plans")

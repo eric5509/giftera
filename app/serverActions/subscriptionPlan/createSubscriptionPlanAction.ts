@@ -11,7 +11,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 export async function createSubscriptionPlanAction(
   input: CreateSubscriptionPlanInput
 ): Promise<SubscriptionPlan> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const payload = keysToSnake<Record<string, any>>(input);
   const { data, error } = await supabase
     .from("subscription_plans")

@@ -5,8 +5,10 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { camelToSnake } from "@/shared/utils/keysToSnake";
 
-export async function getRequestsAction(params: GetRequestsParams = {}): Promise<Request[]> {
-  const supabase = supabaseServer();
+export async function getRequestsAction(
+  params: GetRequestsParams = {}
+): Promise<Request[]> {
+  const supabase = await supabaseServer();
 
   let query = supabase.from("requests").select("*");
 

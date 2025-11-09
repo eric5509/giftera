@@ -4,8 +4,10 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export async function updateVendorAction(input: UpdateVendorInput): Promise<Vendor> {
-  const supabase = supabaseServer();
+export async function updateVendorAction(
+  input: UpdateVendorInput
+): Promise<Vendor> {
+  const supabase = await supabaseServer();
 
   const payload = keysToSnake<Record<string, any>>(input);
 

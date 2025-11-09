@@ -1,11 +1,17 @@
 "use server";
-import { CreateTransactionPayload, Transaction, TransactionStatus } from "@/entities/transaction/types/types";
+import {
+  CreateTransactionPayload,
+  Transaction,
+  TransactionStatus,
+} from "@/entities/transaction/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export async function createTransactionAction(input: CreateTransactionPayload): Promise<Transaction> {
-  const supabase = supabaseServer();
+export async function createTransactionAction(
+  input: CreateTransactionPayload
+): Promise<Transaction> {
+  const supabase = await supabaseServer();
   const payload = keysToSnake<Record<string, any>>(input);
 
   const { data, error } = await supabase

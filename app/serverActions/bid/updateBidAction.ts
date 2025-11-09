@@ -6,7 +6,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function updateBidAction(input: UpdateBidInput): Promise<Bid> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const payload = keysToSnake(input);
 

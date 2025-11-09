@@ -8,7 +8,7 @@ export async function updateTypingStatusAction(
   userId: string,
   isTyping: boolean
 ) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const { data, error } = await supabase
     .from("typing_status")
     .upsert(

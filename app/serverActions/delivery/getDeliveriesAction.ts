@@ -2,11 +2,13 @@
 
 import { Delivery, GetDeliveriesParams } from "@/entities/delivery/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
-import { keysToCamel, } from "@/shared/utils/keysToCamel";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { camelToSnake } from "@/shared/utils/keysToSnake";
 
-export async function getDeliveriesAction(params: GetDeliveriesParams = {}): Promise<Delivery[]> {
-  const supabase = supabaseServer();
+export async function getDeliveriesAction(
+  params: GetDeliveriesParams = {}
+): Promise<Delivery[]> {
+  const supabase = await supabaseServer();
   let query = supabase.from("deliveries").select("*");
 
   if (params.requestId) query = query.eq("request_id", params.requestId);

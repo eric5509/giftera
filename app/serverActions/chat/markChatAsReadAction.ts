@@ -8,7 +8,7 @@ export async function markChatAsReadAction(
   conversationId: string,
   userId: string
 ): Promise<Chat[]> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from("chats")

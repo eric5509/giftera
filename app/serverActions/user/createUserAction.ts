@@ -5,7 +5,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function createUserAction(input: CreateUserInput): Promise<User> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const payload = keysToSnake<Record<string, any>>(input);
 

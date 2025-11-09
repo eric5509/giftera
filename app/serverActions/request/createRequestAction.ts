@@ -8,7 +8,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 export async function createRequestAction(
   input: CreateRequestInput
 ): Promise<Request> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   let photoUrls: string[] = [];
 

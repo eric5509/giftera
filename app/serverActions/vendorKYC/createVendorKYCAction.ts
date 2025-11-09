@@ -1,11 +1,16 @@
 "use server";
 
-import { CreateVendorKYCInput, VendorKYC } from "@/entities/vendorKYC/types/types";
+import {
+  CreateVendorKYCInput,
+  VendorKYC,
+} from "@/entities/vendorKYC/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
-export async function createVendorKYCAction(input: CreateVendorKYCInput): Promise<VendorKYC> {
-  const supabase = supabaseServer();
+export async function createVendorKYCAction(
+  input: CreateVendorKYCInput
+): Promise<VendorKYC> {
+  const supabase = await supabaseServer();
 
   if (!input.idImage || !input.selfie || !input.businessCertificate) {
     throw new Error("Please submit all required images");
@@ -28,7 +33,10 @@ export async function createVendorKYCAction(input: CreateVendorKYCInput): Promis
 
   const idImageUrl = await uploadFile(input.idImage, "vendor_kyc");
   const selfieUrl = await uploadFile(input.selfie, "vendor_kyc");
-  const businessCertificateUrl = await uploadFile(input.businessCertificate, "vendor_kyc");
+  const businessCertificateUrl = await uploadFile(
+    input.businessCertificate,
+    "vendor_kyc"
+  );
 
   const { data, error } = await supabase
     .from("vendor_kyc")

@@ -1,15 +1,21 @@
 "use server";
 
 import { supabaseServer } from "@/shared/lib/supabaseServer";
-import { UpdateFeaturedListingInput, FeaturedListing } from "@/entities/featuredListing/types/types";
+import {
+  UpdateFeaturedListingInput,
+  FeaturedListing,
+} from "@/entities/featuredListing/types/types";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
 export const updateFeaturedListingAction = async (
   input: UpdateFeaturedListingInput
 ): Promise<FeaturedListing> => {
-  const supabase = supabaseServer();
-  const payload = keysToSnake({ ...input, updatedAt: new Date().toISOString() });
+  const supabase = await supabaseServer();
+  const payload = keysToSnake({
+    ...input,
+    updatedAt: new Date().toISOString(),
+  });
 
   const { data, error } = await supabase
     .from("featured_listings")

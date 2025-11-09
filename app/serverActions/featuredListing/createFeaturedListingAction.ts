@@ -1,14 +1,17 @@
 "use server";
 
 import { supabaseServer } from "@/shared/lib/supabaseServer";
-import { FeaturedListing, CreateFeaturedListingInput } from "@/entities/featuredListing/types/types";
+import {
+  FeaturedListing,
+  CreateFeaturedListingInput,
+} from "@/entities/featuredListing/types/types";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
 export const createFeaturedListingAction = async (
   input: CreateFeaturedListingInput
 ): Promise<FeaturedListing> => {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const payload = keysToSnake({
     ...input,

@@ -5,8 +5,10 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export async function createDeliveryAction(input: CreateDeliveryInput): Promise<Delivery> {
-  const supabase = supabaseServer();
+export async function createDeliveryAction(
+  input: CreateDeliveryInput
+): Promise<Delivery> {
+  const supabase = await supabaseServer();
 
   // Example integration with external delivery API
   const externalDeliveryId = "API_RETURNED_ID";

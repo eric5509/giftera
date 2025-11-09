@@ -10,18 +10,20 @@ export type CreateChatInput = {
   senderId: string;
   receiverId: string;
   content: string | File;
-  type?: ChatType; 
+  type?: ChatType;
 };
 
 export async function createChatAction(input: CreateChatInput): Promise<Chat> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   let contentUrl = "";
   let chatType: ChatType = input.type || "TEXT";
 
   // 🖼️ Upload image if content is a File
   if (input.content instanceof File) {
     const file = input.content;
-    const filePath = `chat_uploads/${input.conversationId}/${Date.now()}_${file.name}`;
+    const filePath = `chat_uploads/${input.conversationId}/${Date.now()}_${
+      file.name
+    }`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("chat_media")
       .upload(filePath, file, { upsert: false });

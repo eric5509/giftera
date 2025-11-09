@@ -5,9 +5,11 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export async function updateDeliveryAction(input: UpdateDeliveryInput): Promise<Delivery> {
-  const supabase = supabaseServer();
-const payload = keysToSnake(input); // ✅ fine, no need for Partial
+export async function updateDeliveryAction(
+  input: UpdateDeliveryInput
+): Promise<Delivery> {
+  const supabase = await supabaseServer();
+  const payload = keysToSnake(input); // ✅ fine, no need for Partial
 
   const { data, error } = await supabase
     .from("deliveries")

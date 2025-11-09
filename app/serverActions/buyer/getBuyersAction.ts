@@ -12,16 +12,23 @@ export async function getBuyersAction(params?: {
   sortBy?: keyof Buyer;
   sortOrder?: "asc" | "desc";
 }): Promise<Buyer[]> {
-  const supabase = supabaseServer();
-  const { userId, page = 1, limit = 10, sortBy = "createdAt", sortOrder = "desc" } = params || {};
+  const supabase = await supabaseServer();
+  const {
+    userId,
+    page = 1,
+    limit = 10,
+    sortBy = "createdAt",
+    sortOrder = "desc",
+  } = params || {};
 
   let query = supabase.from("buyers").select("*");
 
   if (userId) query = query.eq("user_id", userId); // db uses snake_case
 
   const sortBySnake = camelToSnake(sortBy); // convert camelCase to snake_case for DB
-  query = query.order(sortBySnake, { ascending: sortOrder === "asc" })
-               .range((page - 1) * limit, page * limit - 1);
+  query = query
+    .order(sortBySnake, { ascending: sortOrder === "asc" })
+    .range((page - 1) * limit, page * limit - 1);
 
   const { data, error } = await query;
   if (error) throw error;

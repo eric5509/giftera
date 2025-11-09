@@ -5,8 +5,10 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export async function updateRequestAction(input: UpdateRequestInput): Promise<Request> {
-  const supabase = supabaseServer();
+export async function updateRequestAction(
+  input: UpdateRequestInput
+): Promise<Request> {
+  const supabase = await supabaseServer();
 
   const payload = keysToSnake(input);
 

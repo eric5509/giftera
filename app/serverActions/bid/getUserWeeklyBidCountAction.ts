@@ -2,8 +2,10 @@
 
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 
-export async function getUserWeeklyBidCountAction(userId: string): Promise<number> {
-  const supabase = supabaseServer();
+export async function getUserWeeklyBidCountAction(
+  userId: string
+): Promise<number> {
+  const supabase = await supabaseServer();
   // Get current date
   const today = new Date();
   // Calculate start (Sunday) and end (Saturday) of the current week

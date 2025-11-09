@@ -1,6 +1,9 @@
 "use server";
 
-import { GetAllSubscriptionPlansParams, SubscriptionPlan } from "@/entities/subscriptionPlan/types/types";
+import {
+  GetAllSubscriptionPlansParams,
+  SubscriptionPlan,
+} from "@/entities/subscriptionPlan/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { camelToSnake } from "@/shared/utils/keysToSnake";
@@ -8,8 +11,13 @@ import { camelToSnake } from "@/shared/utils/keysToSnake";
 export async function getSubscriptionPlansAction(
   params: GetAllSubscriptionPlansParams = {}
 ): Promise<SubscriptionPlan[]> {
-  const supabase = supabaseServer();
-  const { page = 1, limit = 10, sortBy = "createdAt", sortOrder = "asc" } = params;
+  const supabase = await supabaseServer();
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = "createdAt",
+    sortOrder = "asc",
+  } = params;
 
   const sortBySnake = camelToSnake(sortBy);
   const from = (page - 1) * limit;

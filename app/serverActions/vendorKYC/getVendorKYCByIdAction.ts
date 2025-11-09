@@ -5,7 +5,7 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function getVendorKYCByIdAction(id: string): Promise<VendorKYC> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from("vendor_kyc")

@@ -6,7 +6,7 @@ import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
 export async function createNotificationAction(input: CreateNotificationInput) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const payload = keysToSnake({
     ...input,

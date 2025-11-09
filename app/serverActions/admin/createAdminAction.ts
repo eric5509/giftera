@@ -6,7 +6,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 export async function createAdminAction(
   input: CreateAdminInput
 ): Promise<Admin> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const payload = keysToSnake({
     ...input,
     role: input.role || "SUPER_ADMIN",

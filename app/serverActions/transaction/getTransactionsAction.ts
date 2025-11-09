@@ -17,8 +17,13 @@ export interface GetTransactionsParams {
 export async function getTransactionsAction(
   params: GetTransactionsParams = {}
 ): Promise<Transaction[]> {
-  const supabase = supabaseServer();
-  const { page = 1, limit = 10, sortBy = "createdAt", sortOrder = "desc" } = params;
+  const supabase = await supabaseServer();
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = "createdAt",
+    sortOrder = "desc",
+  } = params;
 
   let query = supabase.from("transactions").select("*");
 

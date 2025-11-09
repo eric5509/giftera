@@ -6,21 +6,29 @@ import { camelToSnake } from "@/shared/utils/keysToSnake";
 
 export type GetUsersParams = {
   role?: UserRole;
-  search?: string;           // search by name or email
-  sortBy?: keyof User;       // e.g., "fullName", "createdAt"
+  search?: string; // search by name or email
+  sortBy?: keyof User; // e.g., "fullName", "createdAt"
   sortOrder?: "asc" | "desc";
   page?: number;
   limit?: number;
 };
 
 export async function getUsersAction(params?: GetUsersParams): Promise<User[]> {
-  const supabase = supabaseServer();
-  const { role, search, sortBy = "createdAt", sortOrder = "desc", page = 1, limit = 10 } = params || {};
+  const supabase = await supabaseServer();
+  const {
+    role,
+    search,
+    sortBy = "createdAt",
+    sortOrder = "desc",
+    page = 1,
+    limit = 10,
+  } = params || {};
 
   let query = supabase.from("users").select("*");
 
   if (role) query = query.eq("role", role);
-  if (search) query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`);
+  if (search)
+    query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`);
 
   const sortBySnake = camelToSnake(sortBy as string);
   query = query.order(sortBySnake, { ascending: sortOrder === "asc" });

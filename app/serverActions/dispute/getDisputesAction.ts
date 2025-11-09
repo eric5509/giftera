@@ -14,19 +14,23 @@ export const getDisputesAction = async (params: GetAllDisputesParams = {}) => {
     filters = {},
   } = params;
 
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   let query = supabase.from("disputes").select("*", { count: "exact" });
 
   if (filters.status) query = query.eq("status", filters.status);
-  if (filters.complainantId) query = query.eq("complainant_id", filters.complainantId);
-  if (filters.transactionId) query = query.eq("transaction_id", filters.transactionId);
+  if (filters.complainantId)
+    query = query.eq("complainant_id", filters.complainantId);
+  if (filters.transactionId)
+    query = query.eq("transaction_id", filters.transactionId);
 
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
   const sortBySnake = camelToSnake(sortBy);
-  const { data, error, count } = await query.order(sortBySnake, { ascending: sortOrder === "asc" }).range(from, to);
+  const { data, error, count } = await query
+    .order(sortBySnake, { ascending: sortOrder === "asc" })
+    .range(from, to);
 
   if (error) throw error;
 

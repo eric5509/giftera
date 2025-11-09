@@ -3,7 +3,7 @@
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 
 export const deleteDisputeAction = async (id: string) => {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { error } = await supabase.from("disputes").delete().eq("id", id);
 

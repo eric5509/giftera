@@ -5,13 +5,17 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export async function createVendorAction(input: CreateVendorInput): Promise<Vendor> {
-  const supabase = supabaseServer();
+export async function createVendorAction(
+  input: CreateVendorInput
+): Promise<Vendor> {
+  const supabase = await supabaseServer();
   let logoUrl = "";
 
   // Handle File upload for logo
   if (input.logo instanceof File) {
-    const filePath = `vendor_logos/${input.userId}/${Date.now()}_${input.logo.name}`;
+    const filePath = `vendor_logos/${input.userId}/${Date.now()}_${
+      input.logo.name
+    }`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("vendor_logos")
       .upload(filePath, input.logo, { upsert: false });

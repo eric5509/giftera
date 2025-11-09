@@ -8,7 +8,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 export async function createBuyerAction(
   input: Omit<Buyer, "id" | "createdAt" | "updatedAt">
 ): Promise<Buyer> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const payload = keysToSnake<Record<string, any>>(input);
 
   const { data, error } = await supabase

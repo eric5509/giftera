@@ -4,12 +4,12 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { camelToSnake } from "@/shared/utils/keysToSnake";
 
-export async function getVendorsAction(params: GetVendorsParams = {}): Promise<Vendor[]> {
-  const supabase = supabaseServer();
+export async function getVendorsAction(
+  params: GetVendorsParams = {}
+): Promise<Vendor[]> {
+  const supabase = await supabaseServer();
 
-  let query = supabase
-    .from("vendors")
-    .select(`
+  let query = supabase.from("vendors").select(`
       *,
       subscriptionPlan:subscriptionPlanId (
         id,
@@ -17,10 +17,14 @@ export async function getVendorsAction(params: GetVendorsParams = {}): Promise<V
       )
     `);
 
-  if (params.businessType) query = query.eq("business_type", params.businessType);
-  if (params.verified !== undefined) query = query.eq("verified", params.verified);
-  if (params.subscriptionPlanId) query = query.eq("subscription_plan_id", params.subscriptionPlanId);
-  if (params.searchQuery) query = query.ilike("business_name", `%${params.searchQuery}%`);
+  if (params.businessType)
+    query = query.eq("business_type", params.businessType);
+  if (params.verified !== undefined)
+    query = query.eq("verified", params.verified);
+  if (params.subscriptionPlanId)
+    query = query.eq("subscription_plan_id", params.subscriptionPlanId);
+  if (params.searchQuery)
+    query = query.ilike("business_name", `%${params.searchQuery}%`);
 
   const sortBy = params.sortBy ? camelToSnake(params.sortBy) : "created_at";
   const sortOrder = params.sortOrder || "desc";

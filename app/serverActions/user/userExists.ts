@@ -3,7 +3,7 @@
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 
 export const userExistsByEmail = async (email: string): Promise<boolean> => {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const { data: existingUser, error } = await supabase
     .from("users")
     .select("id")
@@ -19,7 +19,7 @@ export const userExistsByEmail = async (email: string): Promise<boolean> => {
 };
 
 export const userExistsByPhone = async (phone: string): Promise<boolean> => {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const { data: existingUser, error } = await supabase
     .from("users")
     .select("id")

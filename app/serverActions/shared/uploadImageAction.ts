@@ -14,7 +14,7 @@ export async function uploadImageAction(
   file: File,
   folder?: string
 ): Promise<string> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const fileExt = file.name.split(".").pop();
   const timestamp = Date.now();

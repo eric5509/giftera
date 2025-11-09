@@ -6,7 +6,7 @@ import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { camelToSnake } from "@/shared/utils/keysToSnake";
 
 export async function getNotificationsAction(params: GetNotificationsParams) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const userIdFilter = camelToSnake("userId");
   const createdAtSort = camelToSnake("createdAt");

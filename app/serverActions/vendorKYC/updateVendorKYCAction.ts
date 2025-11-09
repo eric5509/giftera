@@ -1,6 +1,9 @@
 "use server";
 
-import { UpdateVendorKYCInput, VendorKYC } from "@/entities/vendorKYC/types/types";
+import {
+  UpdateVendorKYCInput,
+  VendorKYC,
+} from "@/entities/vendorKYC/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
@@ -8,7 +11,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 export async function updateVendorKYCAction(
   input: UpdateVendorKYCInput
 ): Promise<VendorKYC> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const payload = keysToSnake<Record<string, any>>(input);
 

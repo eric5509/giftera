@@ -3,8 +3,10 @@ import { Transaction } from "@/entities/transaction/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
-export async function getTransactionByIdAction(id: string): Promise<Transaction> {
-  const supabase = supabaseServer();
+export async function getTransactionByIdAction(
+  id: string
+): Promise<Transaction> {
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from("transactions")

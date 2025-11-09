@@ -4,10 +4,12 @@ import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
-export type UpdateUserInput = Partial<Omit<User, "id" | "createdAt">> & { id: string };
+export type UpdateUserInput = Partial<Omit<User, "id" | "createdAt">> & {
+  id: string;
+};
 
 export async function updateUserAction(input: UpdateUserInput): Promise<User> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const payload = keysToSnake<Record<string, any>>(input);
 
   const { data, error } = await supabase

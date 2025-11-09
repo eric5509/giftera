@@ -13,7 +13,7 @@ export async function getVendorKYCsAction(params?: {
   page?: number;
   limit?: number;
 }): Promise<VendorKYC[]> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   let query = supabase.from("vendor_kyc").select("*");
 
   if (params?.status) query = query.eq("status", params.status);

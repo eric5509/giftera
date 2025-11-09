@@ -2,8 +2,10 @@ import { Admin, GetAdminsParams } from "@/entities/admin/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
-export async function getAdminsAction(params: GetAdminsParams = {}): Promise<Admin[]> {
-  const supabase = supabaseServer();
+export async function getAdminsAction(
+  params: GetAdminsParams = {}
+): Promise<Admin[]> {
+  const supabase = await supabaseServer();
   let query = supabase.from("admins").select("*");
 
   if (params.role) query = query.eq("role", params.role);

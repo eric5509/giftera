@@ -1,12 +1,18 @@
 "use server";
 
-import { Subscription, UpdateSubscriptionInput } from "@/entities/subscription/types/types";
+import {
+  Subscription,
+  UpdateSubscriptionInput,
+} from "@/entities/subscription/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export const updateSubscriptionAction = async (id: string, input: UpdateSubscriptionInput): Promise<Subscription> => {
-  const supabase = supabaseServer();
+export const updateSubscriptionAction = async (
+  id: string,
+  input: UpdateSubscriptionInput
+): Promise<Subscription> => {
+  const supabase = await supabaseServer();
   const payload = keysToSnake<Record<string, any>>(input);
 
   const { data, error } = await supabase

@@ -4,8 +4,10 @@ import { UpdateAdminInput, Admin } from "@/entities/admin/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 import { keysToSnake } from "@/shared/utils/keysToSnake";
-export async function updateAdminAction(input: UpdateAdminInput): Promise<Admin> {
-  const supabase = supabaseServer();
+export async function updateAdminAction(
+  input: UpdateAdminInput
+): Promise<Admin> {
+  const supabase = await supabaseServer();
   const payload = keysToSnake(input);
 
   const { data, error } = await supabase

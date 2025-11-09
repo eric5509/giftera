@@ -6,7 +6,7 @@ import { keysToSnake } from "@/shared/utils/keysToSnake";
 import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function createBidAction(input: CreateBidInput): Promise<Bid> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   // ✅ Convert input keys to snake_case and cast back to proper type
   const payload = keysToSnake<CreateBidInput>(input);
@@ -20,7 +20,8 @@ export async function createBidAction(input: CreateBidInput): Promise<Bid> {
     .single();
 
   if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
-  if (existingBid) throw new Error("A bid from this vendor for this request already exists.");
+  if (existingBid)
+    throw new Error("A bid from this vendor for this request already exists.");
 
   let samplePhotosUrls: string[] = [];
 
@@ -44,12 +45,12 @@ export async function createBidAction(input: CreateBidInput): Promise<Bid> {
   const { data, error } = await supabase
     .from("bids")
     .insert([
-      { 
-        ...payload, 
-        status: "PENDING", 
-        sample_photos_urls: samplePhotosUrls, 
-        created_at: new Date().toISOString() 
-      }
+      {
+        ...payload,
+        status: "PENDING",
+        sample_photos_urls: samplePhotosUrls,
+        created_at: new Date().toISOString(),
+      },
     ])
     .select()
     .single();
