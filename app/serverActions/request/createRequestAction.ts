@@ -2,6 +2,8 @@
 
 import { CreateRequestInput, Request } from "@/entities/request/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { keysToSnake } from "@/shared/utils/keysToSnake";
 
 export async function createRequestAction(
   input: CreateRequestInput
@@ -10,14 +12,12 @@ export async function createRequestAction(
 
   let photoUrls: string[] = [];
 
-  if (input.photos && input.photos.length > 0) {
+  if (input.photos?.length) {
     for (const file of input.photos) {
       const filePath = `requests/${input.userId}/${Date.now()}_${file.name}`;
-
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("request_photos")
         .upload(filePath, file, { upsert: false });
-
       if (uploadError) throw uploadError;
 
       const { data: publicUrlData } = supabase.storage
@@ -28,23 +28,19 @@ export async function createRequestAction(
     }
   }
 
+  const payload = keysToSnake({
+    ...input,
+    photoUrls,
+    status: "OPEN",
+    createdAt: new Date().toISOString(),
+  });
+
   const { data, error } = await supabase
     .from("requests")
-    .insert([
-      {
-        userId: input.userId,
-        title: input.title,
-        description: input.description,
-        photoUrls,
-        deliveryTime: input.deliveryTime,
-        location: input.location,
-        status: "OPEN",
-        createdAt: new Date().toISOString(),
-      },
-    ])
+    .insert([payload])
     .select()
     .single();
 
   if (error) throw error;
-  return data as Request;
+  return keysToCamel<Request>(data);
 }

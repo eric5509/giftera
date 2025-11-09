@@ -2,6 +2,7 @@
 
 import { Dispute } from "@/entities/dispute/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export const getDisputeByIdAction = async (id: string): Promise<Dispute> => {
   const supabase = supabaseServer();
@@ -13,5 +14,5 @@ export const getDisputeByIdAction = async (id: string): Promise<Dispute> => {
     .single();
 
   if (error) throw error;
-  return data as Dispute;
+  return keysToCamel(data);
 };

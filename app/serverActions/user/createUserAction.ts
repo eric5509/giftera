@@ -1,25 +1,22 @@
 "use server";
-
-import { User } from "@/entities/user/types/types";
+import { CreateUserInput, User } from "@/entities/user/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
-
-export type CreateUserInput = {
-  fullName: string;
-  email: string;
-  phone?: string;
-  role: "BUYER" | "VENDOR" | "ADMIN";
-  avatarUrl?: string;
-};
+import { keysToSnake } from "@/shared/utils/keysToSnake";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function createUserAction(input: CreateUserInput): Promise<User> {
   const supabase = supabaseServer();
 
+  const payload = keysToSnake<Record<string, any>>(input);
+
   const { data, error } = await supabase
     .from("users")
-    .insert([{ ...input, createdAt: new Date().toISOString() }])
+    .insert([
+      { ...payload, created_at: new Date().toISOString(), status: "PENDING" },
+    ])
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel<User>(data);
 }

@@ -1,24 +1,25 @@
 "use server";
 
-import { CreateSubscriptionInput } from "@/entities/subscription/types/types";
+import { CreateSubscriptionInput, Subscription } from "@/entities/subscription/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export const createSubscriptionAction = async (input: CreateSubscriptionInput) => {
+export const createSubscriptionAction = async (input: CreateSubscriptionInput): Promise<Subscription> => {
   const supabase = supabaseServer();
+  const payload = keysToSnake<Record<string, any>>(input);
 
   const { data, error } = await supabase
     .from("subscriptions")
-    .insert([
-      {
-        ...input,
-        status: "active", // default status
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ])
+    .insert([{
+      ...payload,
+      status: "active",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }])
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel<Subscription>(data);
 };

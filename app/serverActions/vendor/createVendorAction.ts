@@ -2,13 +2,15 @@
 
 import { CreateVendorInput, Vendor } from "@/entities/vendor/types/vendor";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { keysToSnake } from "@/shared/utils/keysToSnake";
 
 export async function createVendorAction(input: CreateVendorInput): Promise<Vendor> {
   const supabase = supabaseServer();
-
   let logoUrl = "";
 
-  if (input.logo) {
+  // Handle File upload for logo
+  if (input.logo instanceof File) {
     const filePath = `vendor_logos/${input.userId}/${Date.now()}_${input.logo.name}`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("vendor_logos")
@@ -19,25 +21,26 @@ export async function createVendorAction(input: CreateVendorInput): Promise<Vend
       .from("vendor_logos")
       .getPublicUrl(uploadData.path);
     logoUrl = publicUrlData.publicUrl;
+  } else if (typeof input.logo === "string") {
+    logoUrl = input.logo;
   }
 
+  // Prepare payload
+  const payload = keysToSnake<Record<string, any>>({
+    ...input,
+    logoUrl,
+    verified: false,
+    subscriptionPlan: input.subscriptionPlanId || "FREE",
+    createdAt: new Date().toISOString(),
+  });
+
+  // Insert vendor
   const { data, error } = await supabase
     .from("vendors")
-    .insert([
-      {
-        userId: input.userId,
-        businessName: input.businessName,
-        businessType: input.businessType,
-        address: input.address,
-        verified: false,
-        logoUrl,
-        subscriptionPlan: input.subscriptionPlan || "FREE",
-        createdAt: new Date().toISOString(),
-      },
-    ])
+    .insert([payload])
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel<Vendor>(data);
 }

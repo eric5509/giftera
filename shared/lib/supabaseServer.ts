@@ -6,7 +6,7 @@ export const supabaseServer = () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
-      cookies: cookies() as any, // ✅ cast to any to bypass TS error
+      cookies: cookies() as any, // ✅
     }
   );
 };

@@ -1,15 +1,6 @@
-"use server";
-
-import { Admin } from "@/entities/admin/types/types";
+import { Admin, GetAdminsParams } from "@/entities/admin/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
-
-type GetAdminsParams = {
-  role?: "SUPER_ADMIN" | "MODERATOR";
-  sortBy?: keyof Admin;
-  sortOrder?: "asc" | "desc";
-  page?: number;
-  limit?: number;
-};
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function getAdminsAction(params: GetAdminsParams = {}): Promise<Admin[]> {
   const supabase = supabaseServer();
@@ -17,7 +8,7 @@ export async function getAdminsAction(params: GetAdminsParams = {}): Promise<Adm
 
   if (params.role) query = query.eq("role", params.role);
 
-  const sortBy = params.sortBy || "createdAt";
+  const sortBy = params.sortBy || "created_at";
   const sortOrder = params.sortOrder || "desc";
   query = query.order(sortBy, { ascending: sortOrder === "asc" });
 
@@ -29,5 +20,6 @@ export async function getAdminsAction(params: GetAdminsParams = {}): Promise<Adm
 
   const { data, error } = await query;
   if (error) throw error;
-  return data;
+
+  return keysToCamel<Admin[]>(data); // converts array and all objects inside
 }

@@ -1,6 +1,6 @@
 // entities/transaction/model/useGetTransactions.ts
 import { useQuery } from "@tanstack/react-query";
-import { getTransactionsAction } from "@/app/serverActions/transaction/getTransactions";
+import { getTransactionsAction } from "@/app/serverActions/transaction/getTransactionsAction";
 
 export const useGetTransactions = (params: {
   buyerId?: string;

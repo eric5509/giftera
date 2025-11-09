@@ -25,6 +25,16 @@ export type UpdateAdminInput = {
   role?: AdminRole;
 };
 
+export type GetAdminsParams = {
+  role?: "SUPER_ADMIN" | "MODERATOR";
+  sortBy?: keyof Admin;
+  sortOrder?: "asc" | "desc";
+  page?: number;
+  limit?: number;
+};
+
+
+
 export type AdminDataStore = {
   admins: Admin[];
   filters: {

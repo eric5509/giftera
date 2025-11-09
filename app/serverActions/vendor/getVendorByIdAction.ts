@@ -1,7 +1,7 @@
 "use server";
-
 import { Vendor } from "@/entities/vendor/types/vendor";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function getVendorByIdAction(id: string): Promise<Vendor> {
   const supabase = supabaseServer();
@@ -13,5 +13,5 @@ export async function getVendorByIdAction(id: string): Promise<Vendor> {
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel<Vendor>(data);
 }

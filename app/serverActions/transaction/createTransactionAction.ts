@@ -1,9 +1,12 @@
 "use server";
 import { CreateTransactionPayload, Transaction, TransactionStatus } from "@/entities/transaction/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { keysToSnake } from "@/shared/utils/keysToSnake";
 
-export async function createTransactionAction(payload: CreateTransactionPayload): Promise<Transaction> {
+export async function createTransactionAction(input: CreateTransactionPayload): Promise<Transaction> {
   const supabase = supabaseServer();
+  const payload = keysToSnake<Record<string, any>>(input);
 
   const { data, error } = await supabase
     .from("transactions")
@@ -11,13 +14,13 @@ export async function createTransactionAction(payload: CreateTransactionPayload)
       {
         ...payload,
         status: "pending" as TransactionStatus,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
     ])
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel<Transaction>(data);
 }

@@ -2,18 +2,22 @@
 
 import { GetBidsParams, Bid } from "@/entities/bid/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function getBidsAction(params: GetBidsParams = {}): Promise<Bid[]> {
   const supabase = supabaseServer();
 
   let query = supabase.from("bids").select("*");
 
-  if (params.requestId) query = query.eq("requestId", params.requestId);
-  if (params.vendorId) query = query.eq("vendorId", params.vendorId);
+  if (params.requestId) query = query.eq("request_id", params.requestId);
+  if (params.vendorId) query = query.eq("vendor_id", params.vendorId);
   if (params.status) query = query.eq("status", params.status);
 
-  const sortBy = params.sortBy || "createdAt";
+  const sortBy = params.sortBy 
+    ? params.sortBy.replace(/[A-Z]/g, (l) => `_${l.toLowerCase()}`) 
+    : "created_at";
   const sortOrder = params.sortOrder || "desc";
+
   query = query.order(sortBy, { ascending: sortOrder === "asc" });
 
   if (params.page && params.limit) {
@@ -24,5 +28,6 @@ export async function getBidsAction(params: GetBidsParams = {}): Promise<Bid[]> 
 
   const { data, error } = await query;
   if (error) throw error;
-  return data;
+
+  return keysToCamel<Bid[]>(data); // ✅ handles arrays and nested objects
 }

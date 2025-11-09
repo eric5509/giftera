@@ -1,4 +1,4 @@
-import { getTransactionByIdAction } from "@/app/serverActions/transaction/getTransactionById";
+import { getTransactionByIdAction } from "@/app/serverActions/transaction/getTransactionByIdAction";
 import { useQuery } from "@tanstack/react-query";
 import { Transaction } from "../types/types";
 

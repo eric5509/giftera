@@ -4,7 +4,7 @@ import {
   GetWishlistItemsParams,
   WishlistItem,
 } from "@/entities/wishlist/types/types";
-import { getAllWishlistItemsAction } from "@/app/serverActions/wishlist/getAllWishlistItemsAction";
+import { getAllWishlistItemsAction } from "@/app/serverActions/wishlist/getWishlistItemsAction";
 
 export const useGetWishlistItems = (params?: GetWishlistItemsParams) => {
   return useQuery<WishlistItem[]>({

@@ -8,3 +8,4 @@ export async function deleteAdminAction(id: string): Promise<{ id: string }> {
   if (error) throw error;
   return { id };
 }
+

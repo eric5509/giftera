@@ -2,8 +2,9 @@
 
 import { Subscription } from "@/entities/subscription/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
-export const getSubscriptionByIdAction = async (id: string) => {
+export const getSubscriptionByIdAction = async (id: string): Promise<Subscription> => {
   const supabase = supabaseServer();
 
   const { data, error } = await supabase
@@ -13,5 +14,5 @@ export const getSubscriptionByIdAction = async (id: string) => {
     .single();
 
   if (error) throw error;
-  return data as Subscription;
+  return keysToCamel<Subscription>(data);
 };

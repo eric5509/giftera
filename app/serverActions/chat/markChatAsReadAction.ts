@@ -1,20 +1,26 @@
 "use server";
 
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { Chat } from "@/entities/chat/types/types";
 
-export async function markChatAsReadAction(conversationId: string, userId: string) {
+export async function markChatAsReadAction(
+  conversationId: string,
+  userId: string
+): Promise<Chat[]> {
   const supabase = supabaseServer();
 
   const { data, error } = await supabase
     .from("chats")
     .update({
-      isRead: true,
-      updatedAt: new Date().toISOString(),
+      is_read: true,
+      updated_at: new Date().toISOString(),
     })
-    .eq("conversationId", conversationId)
-    .eq("receiverId", userId)
+    .eq("conversation_id", conversationId)
+    .eq("receiver_id", userId)
     .select();
 
   if (error) throw error;
-  return data;
+
+  return keysToCamel<Chat[]>(data);
 }

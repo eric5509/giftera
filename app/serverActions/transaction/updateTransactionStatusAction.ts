@@ -1,10 +1,9 @@
 "use server";
-
-import { TransactionStatus } from "@/entities/transaction/types/types";
+import { TransactionStatus, Transaction } from "@/entities/transaction/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
-
-export async function updateTransactionStatusAction(id: string, status: TransactionStatus) {
+export async function updateTransactionStatusAction(id: string, status: TransactionStatus): Promise<Transaction> {
   const supabase = supabaseServer();
 
   const { data, error } = await supabase
@@ -15,5 +14,5 @@ export async function updateTransactionStatusAction(id: string, status: Transact
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel<Transaction>(data);
 }

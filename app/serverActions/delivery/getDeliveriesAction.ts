@@ -2,17 +2,19 @@
 
 import { Delivery, GetDeliveriesParams } from "@/entities/delivery/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel, } from "@/shared/utils/keysToCamel";
+import { camelToSnake } from "@/shared/utils/keysToSnake";
 
 export async function getDeliveriesAction(params: GetDeliveriesParams = {}): Promise<Delivery[]> {
   const supabase = supabaseServer();
   let query = supabase.from("deliveries").select("*");
 
-  if (params.requestId) query = query.eq("requestId", params.requestId);
-  if (params.vendorId) query = query.eq("vendorId", params.vendorId);
-  if (params.riderId) query = query.eq("riderId", params.riderId);
+  if (params.requestId) query = query.eq("request_id", params.requestId);
+  if (params.vendorId) query = query.eq("vendor_id", params.vendorId);
+  if (params.riderId) query = query.eq("rider_id", params.riderId);
   if (params.status) query = query.eq("status", params.status);
 
-  const sortBy = params.sortBy || "createdAt";
+  const sortBy = params.sortBy ? camelToSnake(params.sortBy) : "created_at";
   const sortOrder = params.sortOrder || "desc";
   query = query.order(sortBy, { ascending: sortOrder === "asc" });
 
@@ -24,5 +26,6 @@ export async function getDeliveriesAction(params: GetDeliveriesParams = {}): Pro
 
   const { data, error } = await query;
   if (error) throw error;
-  return data;
+
+  return keysToCamel<Delivery[]>(data);
 }

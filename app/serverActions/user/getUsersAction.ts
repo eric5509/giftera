@@ -1,7 +1,8 @@
 "use server";
-
 import { User, UserRole } from "@/entities/user/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { camelToSnake } from "@/shared/utils/keysToSnake";
 
 export type GetUsersParams = {
   role?: UserRole;
@@ -19,12 +20,14 @@ export async function getUsersAction(params?: GetUsersParams): Promise<User[]> {
   let query = supabase.from("users").select("*");
 
   if (role) query = query.eq("role", role);
-  if (search) query = query.or(`fullName.ilike.%${search}%,email.ilike.%${search}%`);
+  if (search) query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`);
 
-  query = query.order(sortBy, { ascending: sortOrder === "asc" });
+  const sortBySnake = camelToSnake(sortBy as string);
+  query = query.order(sortBySnake, { ascending: sortOrder === "asc" });
 
-  const { data, error } = await query.range((page - 1) * limit, page * limit - 1);
+  query = query.range((page - 1) * limit, page * limit - 1);
 
+  const { data, error } = await query;
   if (error) throw error;
-  return data;
+  return keysToCamel<User[]>(data);
 }

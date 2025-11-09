@@ -2,6 +2,8 @@
 
 import { Buyer } from "@/entities/buyer/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { camelToSnake } from "@/shared/utils/keysToSnake";
 
 export async function getBuyersAction(params?: {
   userId?: string;
@@ -15,13 +17,14 @@ export async function getBuyersAction(params?: {
 
   let query = supabase.from("buyers").select("*");
 
-  if (userId) query = query.eq("userId", userId);
+  if (userId) query = query.eq("user_id", userId); // db uses snake_case
 
-  query = query.order(sortBy, { ascending: sortOrder === "asc" })
+  const sortBySnake = camelToSnake(sortBy); // convert camelCase to snake_case for DB
+  query = query.order(sortBySnake, { ascending: sortOrder === "asc" })
                .range((page - 1) * limit, page * limit - 1);
 
   const { data, error } = await query;
   if (error) throw error;
 
-  return data;
+  return keysToCamel<Buyer[]>(data); // convert all keys back to camelCase
 }

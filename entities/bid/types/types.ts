@@ -29,6 +29,8 @@ export type UpdateBidInput = {
   status?: BidStatus;
 };
 
+
+
 export type GetBidsParams = {
   requestId?: string;
   vendorId?: string;

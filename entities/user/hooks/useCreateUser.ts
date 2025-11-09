@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUserAction, CreateUserInput } from "@/app/serverActions/user/createUserAction";
-import { User } from "../types/types";
+import { createUserAction } from "@/app/serverActions/user/createUserAction";
+import { CreateUserInput, User } from "../types/types";
 
 export const useCreateUser = () => {
   const queryClient = useQueryClient();

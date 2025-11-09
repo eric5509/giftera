@@ -2,19 +2,28 @@
 
 import { GetNotificationsParams } from "@/entities/notification/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { camelToSnake } from "@/shared/utils/keysToSnake";
 
-
-export async function getNotificationsAction(params: GetNotificationsParams): Promise<Notification[]> {
+export async function getNotificationsAction(params: GetNotificationsParams) {
   const supabase = supabaseServer();
-  const { data, error } = await supabase
-    .from("notifications")
-    .select("*")
-    .eq("userId", params.userId)
-    .order("createdAt", { ascending: false })
-    .range(
-      ((params.page || 1) - 1) * (params.limit || 10),
-      (params.page || 1) * (params.limit || 10) - 1
-    );
+
+  const userIdFilter = camelToSnake("userId");
+  const createdAtSort = camelToSnake("createdAt");
+
+  const page = params.page || 1;
+  const limit = params.limit || 10;
+
+  let query = supabase.from("notifications").select("*");
+
+  if (params.userId) query = query.eq(userIdFilter, params.userId);
+
+  query = query
+    .order(createdAtSort, { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
+
+  const { data, error } = await query;
   if (error) throw error;
-  return data;
+
+  return keysToCamel(data);
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
 
 export async function updateTypingStatusAction(
   conversationId: string,
@@ -23,5 +24,5 @@ export async function updateTypingStatusAction(
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel(data);
 }

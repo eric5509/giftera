@@ -1,4 +1,10 @@
 export type UserRole = "BUYER" | "VENDOR" | "ADMIN";
+export type UserStatus =
+  | "PENDING"
+  | "SUSPENDED"
+  | "BLOCKED"
+  | "ACTIVE"
+  | "INACTIVE";
 
 export type User = {
   id: string;
@@ -9,6 +15,13 @@ export type User = {
   avatarUrl?: string; // optional profile picture
   createdAt: string;
   updatedAt?: string;
+};
+
+export type CreateUserInput = {
+  fullName: string;
+  email: string;
+  phone?: string;
+  password: string 
 };
 
 export type UserDataStore = {

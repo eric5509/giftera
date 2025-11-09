@@ -2,29 +2,32 @@
 
 import { CreateDeliveryInput, Delivery } from "@/entities/delivery/types/types";
 import { supabaseServer } from "@/shared/lib/supabaseServer";
+import { keysToCamel } from "@/shared/utils/keysToCamel";
+import { keysToSnake } from "@/shared/utils/keysToSnake";
 
 export async function createDeliveryAction(input: CreateDeliveryInput): Promise<Delivery> {
   const supabase = supabaseServer();
 
-  // Here you would call the 3rd-party delivery API and get externalDeliveryId
-  // Example placeholder:
+  // Example integration with external delivery API
   const externalDeliveryId = "API_RETURNED_ID";
   const trackingUrl = "https://provider.com/track/API_RETURNED_ID";
-  const provider = "GIG"
+  const provider = "GIG";
+
+  const payload = keysToSnake({
+    ...input,
+    externalDeliveryId,
+    trackingUrl,
+    provider,
+    status: "PENDING",
+    createdAt: new Date().toISOString(),
+  });
 
   const { data, error } = await supabase
     .from("deliveries")
-    .insert([{
-      ...input,
-      externalDeliveryId,
-      trackingUrl,
-      provider,
-      status: "PENDING",
-      createdAt: new Date().toISOString()
-    }])
+    .insert([payload])
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return keysToCamel<Delivery>(data);
 }

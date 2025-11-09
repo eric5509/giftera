@@ -1,5 +1,4 @@
 "use server ";
-
 import { supabaseServer } from "@/shared/lib/supabaseServer";
 
 export const deleteSubscriptionAction = async (id: string) => {
